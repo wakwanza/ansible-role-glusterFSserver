@@ -1,0 +1,31 @@
+---
+- name: Make sure the EPEL repository is available
+  template: >
+    src=epel.repo 
+    dest=/etc/yum.repos.d/epel.repo 
+    owner=root group=root mode=644
+
+- name: Make sure the GlusterFS repository is available
+  template: >
+    src=glusterfs.repo
+    dest=/etc/yum.repos.d/glusterfs.repo
+    owner=root group=root mode=644
+
+- name: Install the dependencies and helper packages
+  yum: pkg={{ item }} state=installed
+  with_items:
+    - libselinux
+    - libselinux-python
+    - python-pip
+    - xfsprogs
+    - fuse
+    - fuse-libs
+
+- name: Install the GlusterFS packages
+  yum: pkg={{ item }} state=installed
+  with_items:
+    - glusterfs-fuse
+    - glusterfs-server
+    - glusterfs-geo-replication
+    - glusterfs-devel
+    - glusterfs

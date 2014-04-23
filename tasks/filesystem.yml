@@ -1,0 +1,12 @@
+---
+- name: Create the mount point on the server
+  action: file path={{ data_dir_path }} state=directory
+
+- name: Format the XFS base file system
+  command: /sbin/mkfs.xfs  {{ dev_path }}
+  notify:
+    - restart rpcbind
+    - restart glusterd
+
+- name: Mount the base system to the data path
+  command: mount {{ dev_path }}  {{ data_dir_path }}
